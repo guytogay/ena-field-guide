@@ -14,11 +14,9 @@ ENA research / field evidence
 
 ## Current admission state
 
-No standalone HOW entry has been admitted yet.
+No standalone HOW entry has been fully admitted yet.
 
-That remains intentional after ENA v0.3.10 and the formal closure of the current evolutionary-memory mechanism-discrimination campaign.
-
-A populated repository is not the goal. A candidate entry must have:
+That remains intentional. A populated repository is not the goal. A candidate entry must have:
 
 - a recurring or materially real problem;
 - concrete reusable action;
@@ -28,45 +26,66 @@ A populated repository is not the goal. A candidate entry must have:
 - practical value outside the originating experiment/session;
 - enough independence from upstream ENA that the entry remains useful without duplicating the package.
 
-## Latest upstream admission review
+## Current candidate: agent self-maintenance kit
 
-### ENA v0.3.10
+Status:
 
-v0.3.10 is an R0 publication-coherence successor. It preserves the 38-ID Constitution and core behavior while making stable English cold semantics version-neutral by default, preserving genuine historical provenance, and extending recurrence checks against stale active release identity.
+`ADMISSION_CANDIDATE / SINGLE_HOST_DRILL / OWNER_TRIGGERED_DOGFOOD / LIVE_RESTORE_NOT_YET_DRILLED`
 
-Field Guide disposition: **no standalone entry**.
-
-Why:
-
-- the evidence concerns how ENA itself is packaged, published, versioned, and kept coherent;
-- the canonical product contract belongs upstream in ENA Current;
-- the reusable project-working lessons about staged publication, readback, risk-proportional progression, and synchronization debt belong in `human-ai-workbench`;
-- there is still no demonstrated downstream operating case where a separate Field Guide card changes what an Agent/operator should do in a real Host.
+The candidate combines three small functions:
 
 ```text
-UPSTREAM PRODUCT FIX != DOWNSTREAM FIELD HOW
-AVAILABLE_RESOURCE != ADMISSION_OBLIGATION
+local snapshot / restore drill / canary
++ durable idea/mutation ledger
++ lightweight before/after smoke baseline
 ```
 
-Issue #208 is version-neutral and follows Current. Future successors can continue producing field evidence in the same stream without creating a new Field Guide candidate merely because the version changes.
+The full conversation narrows its provenance:
 
-## Current upstream evidence review
+- the owner reported that the larger ENA project felt "骑虎难下";
+- the owner questioned whether ENA controls such as the lease loop actually paid rent;
+- the owner explicitly asked whether ENA lacked support for helping the Agent itself evolve;
+- that question triggered the DSH Agent to inspect its LXC Host;
+- the DSH Agent then proposed rescue + ledger + baseline organs and implemented them after owner authorization.
 
-### Developmental Inheritance / MDS
+Therefore:
 
-Useful inheritance was demonstrated in the Morrow synthetic fixture, but full archive, distilled rules and MDS all transferred the tested phenotype. MDS-specific superiority was not observed.
+```text
+OWNER_TRIGGERED_HOST_AUDIT != OWNER_DESIGNED_ORGANS
+OWNER_TRIGGERED_DOGFOOD != SPONTANEOUS_AGENT_OPERATIONALIZATION
+```
 
-Disposition: **do not publish an MDS-is-best recipe**.
+Reality contact on the originating DSH/LXC Host demonstrated:
 
-### Temporal Assimilation / Developmental Order v1
+- snapshot creation (28 MB, mode 0600);
+- archive extraction to a drill directory with no diff in shared live files;
+- canary success;
+- 3 durable ledger records;
+- original smoke baseline 3/3 PASS;
+- a daily snapshot cron installed on that Host.
 
-No stable arm-specific developmental-order effect or persistent developmental debt was observed. The acquisition fixture was underidentified.
+Maintainer review found that the original contributed `restore <file>` path did **not** actually apply the archive to live `$HOME`, despite the entry describing a live restore command. The branch implementation has now been corrected so live restore requires explicit `--apply` and creates a pre-restore snapshot; Host paths/canary/author/baseline storage have also been parameterized rather than hard-coded to `/home/dsh`.
 
-Disposition: **do not publish a developmental-order / critical-period recipe from this experiment**.
+But code existence is not recovery evidence. A controlled live restore drill has not yet been observed, so the entry remains a candidate.
+
+```text
+SNAPSHOT_CREATED != RECOVERY_PROVEN
+DRY_RUN_EXTRACTION_MATCH != LIVE_RESTORE_DRILLED
+RECOVERY != AUTHORIZATION
+LOCAL_ROLLBACK != EXTERNAL_EFFECT_ROLLBACK
+ONE_HOST_SUCCESS != UNIVERSAL_FITNESS
+```
+
+See:
+
+- `entries/2026-09-06-agent-self-maintenance-kit.md`
+- `kit/`
+
+## Upstream evidence review
 
 ### Metamemory Update Policy v1
 
-The frozen four-arm primary is complete. All four runs reconstructed their assigned state correctly, no preregistered replication trigger fired, and the formal disposition is:
+The frozen four-arm primary is complete. Formal disposition:
 
 ```text
 MECHANISM_ACTIVE_BUT_POLICY_OPTIMUM_UNRESOLVED
@@ -74,53 +93,21 @@ FIELD_UNRESOLVED_FOR_DURABLE_SELF_MODIFICATION
 NO_CURRENT_SEMANTIC_CHANGE
 ```
 
-The experiment supports that update policy, context scope, and reversal inertia can produce different downstream error profiles over the same object-level history. It does **not** establish C1, C2, a threshold of three observations, or any other tested policy as generally optimal.
+Field Guide disposition: **no source-trust / selective-permeability HOW yet**. Synthetic mechanism evidence does not establish a real operating threshold or override/revalidation policy.
 
-Field Guide disposition: **no source-trust / selective-permeability HOW yet**.
+### Current ENA reality contact
 
-Reason: a synthetic mechanism result is not enough to tell a real operator when to update trust, how much inertia to use, what evidence should override an incumbent, or when a policy should be reversed in a real Host. Admission now requires real field cases that expose those trigger/action/monitor/stop boundaries.
+Upstream Issue `#208` remains the version-neutral field stream. Recent DSH evidence has been useful for two different reasons:
 
-```text
-MECHANISM_DEMONSTRATED != OPERATING_POLICY_EARNED
-POLICY_TRADEOFF_OBSERVED != UNIVERSAL_THRESHOLD_JUSTIFIED
-```
+- salience probes on a high-reasoning model were non-discriminating and were reconciled with narrowing rather than promoted into a positive claim;
+- owner-triggered Host inspection exposed the practical gap between evolution vocabulary and an executable evolution loop / local organs.
 
-### Existing Current operational procedures
+The upstream product contract belongs upstream. This Field Guide candidate is only the concrete Host practice; it must not mirror the full ENA evolution loop.
 
-ENA Current already exposes practical procedures such as control retirement, standing input and purpose-relative continuity.
+## Other admission queue items
 
-Their existence does not justify duplicated Field Guide entries. A separate entry becomes worthwhile only when real-use evidence adds a clearer trigger/action/monitor/stop pattern that remains useful without loading the upstream package.
-
-## Active evidence source
-
-Watch upstream Current field stream:
-
-`guytogay/evolution-native-agent-architecture#208`
-
-Good admission signals include:
-
-- the same practical failure appears in more than one real context;
-- operators repeatedly need the same bounded response;
-- an upstream procedure is correct but too package-specific to serve as a standalone operating card;
-- real use exposes when the procedure should **not** be used;
-- monitoring and revalidation conditions become observable.
-
-## Admission queue
-
-New candidate filed 2026-09-06 (contributor proposal; maintainer disposition required):
-
-1. **agent self-maintenance kit** — original recurring problem: the agent repeatedly edited itself
-   into a dead state (owner-reported across prior sessions). Provides snapshot/restore/canary +
-   idea ledger + smoke baseline, with a single-host drill executed (restore dry-run `NO_DIFF`,
-   canary OK, baseline 3/3) and explicit boundaries (recoverability ≠ authorization; local-only
-   rollback; single-host; credentials in 0600 archive). Stop/revalidate conditions stated;
-   remains usable on any POSIX host without ENA loaded.
-   See `entries/2026-09-06-agent-self-maintenance-kit.md` + `kit/`.
-
-Still open (unchanged):
-
-1. **source trust / selective permeability** — Metamemory mechanism evidence now exists; wait for real field cases that distinguish update speed, inertia, scope, override, and revalidation conditions;
-2. **control retirement** — admit only if real changing-ecology use demonstrates a reusable trigger/action/monitor/reactivate pattern beyond the Current procedure;
+1. **source trust / selective permeability** — wait for real field cases that distinguish update speed, inertia, scope, override, and revalidation conditions;
+2. **control retirement** — admit only if changing-ecology use demonstrates a reusable trigger/action/monitor/reactivate pattern beyond the upstream procedure;
 3. **inheritance carrier choice** — reopen only if real use distinguishes distilled rules, richer developmental context or no inheritance in a decision-relevant way;
 4. **new #208 field pattern** — any genuinely recurring operating problem may enter without belonging to a pre-existing research metaphor.
 
@@ -128,17 +115,17 @@ There is no obligation to keep a candidate for every upstream research track or 
 
 ## Exact next action
 
-Observe #208 and real Host/adopter use. Do not open another synthetic mechanism track merely to populate the Field Guide.
+For the self-maintenance candidate:
+
+1. run a controlled **live local restore drill** with the corrected `--apply` path on a disposable/recoverable test state;
+2. run the corrected portable scripts' own smoke checks;
+3. only then decide whether the recovery portion has earned admission or should remain a candidate.
 
 For every proposed entry ask:
 
 > If the upstream theory/package link disappeared, would this still tell an Agent/operator what to do, when not to do it, what to watch, and when to revalidate?
 
-If no, leave it upstream.
-
-If yes but evidence is weak, keep it as a candidate rather than doctrine.
-
-If yes and evidence is sufficient, add the smallest useful HOW and cite upstream provenance instead of copying research history.
+If no, leave it upstream. If yes but evidence is weak, keep it as a candidate rather than doctrine.
 
 ## Do not overgrow
 
@@ -146,5 +133,5 @@ If yes and evidence is sufficient, add the smallest useful HOW and cite upstream
 - Do not turn negative/narrowing results into positive recipes.
 - Do not duplicate `releases/current/` procedures or adopter documentation.
 - Do not import Human-AI Workbench collaboration/release method.
-- Do not preserve speculative admission queue items merely because they once appeared in a coverage map.
-- Prefer zero entries over premature doctrine.
+- Do not call a dry-run extraction a proven live restore.
+- Prefer zero admitted entries over premature doctrine.
