@@ -107,7 +107,17 @@ Good admission signals include:
 
 ## Admission queue
 
-Only active candidates:
+New candidate filed 2026-09-06 (contributor proposal; maintainer disposition required):
+
+1. **agent self-maintenance kit** — original recurring problem: the agent repeatedly edited itself
+   into a dead state (owner-reported across prior sessions). Provides snapshot/restore/canary +
+   idea ledger + smoke baseline, with a single-host drill executed (restore dry-run `NO_DIFF`,
+   canary OK, baseline 3/3) and explicit boundaries (recoverability ≠ authorization; local-only
+   rollback; single-host; credentials in 0600 archive). Stop/revalidate conditions stated;
+   remains usable on any POSIX host without ENA loaded.
+   See `entries/2026-09-06-agent-self-maintenance-kit.md` + `kit/`.
+
+Still open (unchanged):
 
 1. **source trust / selective permeability** — Metamemory mechanism evidence now exists; wait for real field cases that distinguish update speed, inertia, scope, override, and revalidation conditions;
 2. **control retirement** — admit only if real changing-ecology use demonstrates a reusable trigger/action/monitor/reactivate pattern beyond the Current procedure;
