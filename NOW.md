@@ -16,9 +16,9 @@ ENA research / field evidence
 
 No standalone HOW entry has been admitted yet.
 
-That remains intentional after ENA v0.3.8.
+That remains intentional after ENA v0.3.9.
 
-A populated repository is not the goal. A candidate entry must still have:
+A populated repository is not the goal. A candidate entry must have:
 
 - a recurring or materially real problem;
 - concrete reusable action;
@@ -26,39 +26,29 @@ A populated repository is not the goal. A candidate entry must still have:
 - applicability boundary or counterexample;
 - monitoring/failure conditions;
 - practical value outside the originating experiment/session;
-- enough independence from upstream ENA that the entry remains useful as an operating guide rather than a duplicated summary.
+- enough independence from upstream ENA that the entry remains useful without duplicating the package.
 
-## Post-v0.3.8 admission review
+## Latest upstream admission review
 
-### v0.3.8 product-surface consolidation
+### ENA v0.3.9
 
-Upstream ENA now has product-first human/Agent entrypoints, explicit enforcement classes, repaired zh-CN hot semantics, stronger fixtures and rapid Current succession.
+v0.3.9 is an R0 adopter/product-surface successor. It makes the Runtime Adoption Kernel the single ordinary Agent hot payload, moves other resources cold/on-demand, repairs root/zh-CN release-identity drift, and expands machine recurrence checks.
 
 Field Guide disposition: **no standalone entry**.
 
 Why:
 
-- these changes improve how ENA itself is packaged/adopted;
-- the canonical implementation belongs in ENA Current;
-- duplicating them here would create two adopter surfaces and drift risk;
-- the general collaboration/release-process lesson belongs in `human-ai-workbench`, not this repository.
+- the evidence concerns how ENA itself is packaged, published, and kept coherent;
+- the canonical product contract belongs upstream in ENA Current;
+- the project-working lesson about atomic publish/readback and synchronization debt belongs in `human-ai-workbench`;
+- there is still no demonstrated downstream operating case where a separate card changes what an Agent/operator should do in a real Host.
 
-`UPSTREAM PRODUCT FIX != DOWNSTREAM FIELD HOW`
+```text
+UPSTREAM PRODUCT FIX != DOWNSTREAM FIELD HOW
+AVAILABLE_RESOURCE != ADMISSION_OBLIGATION
+```
 
-### Issue #201
-
-Issue #201 supplied real external/adopter evidence that ENA's own narration/projection/test surface could mislead a fresh adopter. That evidence earned v0.3.8 upstream.
-
-It did **not** yet establish a reusable domain-operating procedure such as control retirement, source-trust updating or recovery handling that should live here.
-
-### Evolutionary-memory closure audit
-
-Upstream has explicitly closed the broad open-track queue behind `SUBSUMED / SEMANTICALLY_COVERED / FIELD_UNRESOLVED / METAPHOR_ONLY` dispositions rather than requiring one experiment per topic.
-
-Field Guide consequence:
-
-- do not keep placeholder entries for sleep/replay/dream/decay/reconsolidation merely because the concepts remain interesting;
-- such a topic re-enters the queue only when a real operating case produces a bounded reusable procedure with evidence.
+Issue #208 is now version-neutral and follows Current. A later v0.3.10+ successor can continue producing evidence in the same stream without creating a new Field Guide candidate merely because the version changed.
 
 ## Current upstream evidence review
 
@@ -88,17 +78,15 @@ Their existence does not justify duplicated Field Guide entries. A separate entr
 
 ## Active evidence source
 
-Watch upstream field stream:
+Watch upstream Current field stream:
 
 `guytogay/evolution-native-agent-architecture#208`
-
-This is now the main place where v0.3.8 real-use evidence may generate a Field Guide candidate.
 
 Good admission signals include:
 
 - the same practical failure appears in more than one real context;
 - operators repeatedly need the same bounded response;
-- a Current principle/procedure is correct but too upstream-specific to serve as a standalone operating card;
+- an upstream procedure is correct but too package-specific to serve as a standalone operating card;
 - real use exposes when the procedure should **not** be used;
 - monitoring and revalidation conditions become observable.
 
@@ -106,12 +94,12 @@ Good admission signals include:
 
 Only active candidates:
 
-1. **source trust / selective permeability** — wait for Metamemory result and any later field evidence;
+1. **source trust / selective permeability** — wait for Metamemory result and later field evidence;
 2. **control retirement** — admit only if real changing-ecology use demonstrates a reusable trigger/action/monitor/reactivate pattern beyond the Current procedure;
 3. **inheritance carrier choice** — reopen only if real use distinguishes distilled rules, richer developmental context or no inheritance in a decision-relevant way;
 4. **new #208 field pattern** — any genuinely recurring operating problem may enter without belonging to a pre-existing research metaphor.
 
-There is no obligation to keep a candidate for every upstream research track.
+There is no obligation to keep a candidate for every upstream research track or release.
 
 ## Exact next action
 
@@ -129,7 +117,7 @@ If yes and evidence is sufficient, add the smallest useful HOW and cite upstream
 
 ## Do not overgrow
 
-- Do not create entries to match every ENA research track.
+- Do not create entries to match every ENA research track or release.
 - Do not turn negative/narrowing results into positive recipes.
 - Do not duplicate `releases/current/` procedures or adopter documentation.
 - Do not import Human-AI Workbench collaboration/release method.
