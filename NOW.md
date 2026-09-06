@@ -16,7 +16,7 @@ ENA research / field evidence
 
 No standalone HOW entry has been admitted yet.
 
-That remains intentional after ENA v0.3.9.
+That remains intentional after ENA v0.3.10 and the formal closure of the current evolutionary-memory mechanism-discrimination campaign.
 
 A populated repository is not the goal. A candidate entry must have:
 
@@ -30,25 +30,25 @@ A populated repository is not the goal. A candidate entry must have:
 
 ## Latest upstream admission review
 
-### ENA v0.3.9
+### ENA v0.3.10
 
-v0.3.9 is an R0 adopter/product-surface successor. It makes the Runtime Adoption Kernel the single ordinary Agent hot payload, moves other resources cold/on-demand, repairs root/zh-CN release-identity drift, and expands machine recurrence checks.
+v0.3.10 is an R0 publication-coherence successor. It preserves the 38-ID Constitution and core behavior while making stable English cold semantics version-neutral by default, preserving genuine historical provenance, and extending recurrence checks against stale active release identity.
 
 Field Guide disposition: **no standalone entry**.
 
 Why:
 
-- the evidence concerns how ENA itself is packaged, published, and kept coherent;
+- the evidence concerns how ENA itself is packaged, published, versioned, and kept coherent;
 - the canonical product contract belongs upstream in ENA Current;
-- the project-working lesson about atomic publish/readback and synchronization debt belongs in `human-ai-workbench`;
-- there is still no demonstrated downstream operating case where a separate card changes what an Agent/operator should do in a real Host.
+- the reusable project-working lessons about staged publication, readback, risk-proportional progression, and synchronization debt belong in `human-ai-workbench`;
+- there is still no demonstrated downstream operating case where a separate Field Guide card changes what an Agent/operator should do in a real Host.
 
 ```text
 UPSTREAM PRODUCT FIX != DOWNSTREAM FIELD HOW
 AVAILABLE_RESOURCE != ADMISSION_OBLIGATION
 ```
 
-Issue #208 is now version-neutral and follows Current. A later v0.3.10+ successor can continue producing evidence in the same stream without creating a new Field Guide candidate merely because the version changed.
+Issue #208 is version-neutral and follows Current. Future successors can continue producing field evidence in the same stream without creating a new Field Guide candidate merely because the version changes.
 
 ## Current upstream evidence review
 
@@ -66,9 +66,24 @@ Disposition: **do not publish a developmental-order / critical-period recipe fro
 
 ### Metamemory Update Policy v1
 
-Preregistered upstream; primary evidence not yet collected.
+The frozen four-arm primary is complete. All four runs reconstructed their assigned state correctly, no preregistered replication trigger fired, and the formal disposition is:
 
-Disposition: **no source-trust / selective-permeability HOW before formal result and boundary adjudication**.
+```text
+MECHANISM_ACTIVE_BUT_POLICY_OPTIMUM_UNRESOLVED
+FIELD_UNRESOLVED_FOR_DURABLE_SELF_MODIFICATION
+NO_CURRENT_SEMANTIC_CHANGE
+```
+
+The experiment supports that update policy, context scope, and reversal inertia can produce different downstream error profiles over the same object-level history. It does **not** establish C1, C2, a threshold of three observations, or any other tested policy as generally optimal.
+
+Field Guide disposition: **no source-trust / selective-permeability HOW yet**.
+
+Reason: a synthetic mechanism result is not enough to tell a real operator when to update trust, how much inertia to use, what evidence should override an incumbent, or when a policy should be reversed in a real Host. Admission now requires real field cases that expose those trigger/action/monitor/stop boundaries.
+
+```text
+MECHANISM_DEMONSTRATED != OPERATING_POLICY_EARNED
+POLICY_TRADEOFF_OBSERVED != UNIVERSAL_THRESHOLD_JUSTIFIED
+```
 
 ### Existing Current operational procedures
 
@@ -94,7 +109,7 @@ Good admission signals include:
 
 Only active candidates:
 
-1. **source trust / selective permeability** — wait for Metamemory result and later field evidence;
+1. **source trust / selective permeability** — Metamemory mechanism evidence now exists; wait for real field cases that distinguish update speed, inertia, scope, override, and revalidation conditions;
 2. **control retirement** — admit only if real changing-ecology use demonstrates a reusable trigger/action/monitor/reactivate pattern beyond the Current procedure;
 3. **inheritance carrier choice** — reopen only if real use distinguishes distilled rules, richer developmental context or no inheritance in a decision-relevant way;
 4. **new #208 field pattern** — any genuinely recurring operating problem may enter without belonging to a pre-existing research metaphor.
@@ -103,7 +118,7 @@ There is no obligation to keep a candidate for every upstream research track or 
 
 ## Exact next action
 
-Observe #208 and the Metamemory adjudication.
+Observe #208 and real Host/adopter use. Do not open another synthetic mechanism track merely to populate the Field Guide.
 
 For every proposed entry ask:
 
