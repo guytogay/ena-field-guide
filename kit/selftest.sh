@@ -1,19 +1,64 @@
 #!/usr/bin/env bash
-# selftest.sh — 能力烟测 + 前后对照基线
-# 用法: selftest.sh [--baseline]   --baseline 写入 baseline.jsonl,否则只打印
+# selftest.sh — lightweight Host smoke baseline for before/after self-change comparison
+# Usage: selftest.sh [--baseline [label]]
 set -euo pipefail
-KIT=/home/dsh/ena-selfkit
-BASE="$KIT/baseline.jsonl"
-TS="$(date +%Y%m%d-%H%M%S)"
-res=()
-probe() { # $1 name $2 cmd... ; sets PASS/FAIL
-  local name="$1"; shift
-  if "$@" >/dev/null 2>&1; then res+=("{\"ts\":\"$TS\",\"probe\":\"$name\",\"pass\":true}"); echo "[PASS] $name"; else res+=("{\"ts\":\"$TS\",\"probe\":\"$name\",\"pass\":false}"); echo "[FAIL] $name"; fi
-}
-probe canary-llm bash -c 'cd /tmp && dsh --profile headless "只回答数字 42" 2>/dev/null | tr -d "[:space:]" | grep -q 42'
-probe git-workspace bash -c 'D=$(mktemp -d); cd "$D"; git init -q; echo hi > f.txt; git add f.txt; git -c user.email=t@t -c user.name=t commit -qm x; git log --oneline | grep -q .'
-probe file-roundtrip bash -c 'F=$(mktemp); echo hello > "$F"; grep -q hello "$F"; rm "$F"'
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+KIT_DIR="${KIT_DIR:-$SCRIPT_DIR}"
+BASELINE_FILE="${BASELINE_FILE:-$KIT_DIR/baseline.jsonl}"
+CANARY_CMD="${CANARY_CMD:-}"
+TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+LABEL="manual"
+WRITE_BASELINE=false
 if [[ "${1:-}" == "--baseline" ]]; then
-  printf '%s\n' "${res[@]}" >> "$BASE"
-  echo "BASELINE_APPENDED $BASE"
+  WRITE_BASELINE=true
+  LABEL="${2:-manual}"
 fi
+
+rows=()
+record() {
+  local name="$1" status="$2"
+  rows+=("{\"ts\":\"$TS\",\"label\":\"$LABEL\",\"probe\":\"$name\",\"status\":\"$status\"}")
+  printf '[%s] %s\n' "$status" "$name"
+}
+
+if [[ -n "$CANARY_CMD" ]]; then
+  if bash -lc "$CANARY_CMD" >/dev/null 2>&1; then record canary PASS; else record canary FAIL; fi
+elif command -v dsh >/dev/null 2>&1; then
+  if bash -c 'cd /tmp && dsh --profile headless "只回答数字 42" 2>/dev/null | tr -d "[:space:]" | grep -q 42' >/dev/null 2>&1; then
+    record canary PASS
+  else
+    record canary FAIL
+  fi
+else
+  record canary SKIP
+fi
+
+if command -v git >/dev/null 2>&1; then
+  if bash -c 'D=$(mktemp -d); trap "rm -rf \"$D\"" EXIT; cd "$D"; git init -q; echo hi > f.txt; git add f.txt; git -c user.email=t@t -c user.name=t commit -qm x; git log --oneline | grep -q .' >/dev/null 2>&1; then
+    record git-workspace PASS
+  else
+    record git-workspace FAIL
+  fi
+else
+  record git-workspace SKIP
+fi
+
+if bash -c 'F=$(mktemp); trap "rm -f \"$F\"" EXIT; echo hello > "$F"; grep -q hello "$F"' >/dev/null 2>&1; then
+  record file-roundtrip PASS
+else
+  record file-roundtrip FAIL
+fi
+
+if $WRITE_BASELINE; then
+  mkdir -p "$(dirname "$BASELINE_FILE")"
+  touch "$BASELINE_FILE"
+  chmod 600 "$BASELINE_FILE"
+  printf '%s\n' "${rows[@]}" >> "$BASELINE_FILE"
+  echo "BASELINE_APPENDED $BASELINE_FILE label=$LABEL"
+fi
+
+# A FAIL is a signal; SKIP means this Host lacks that probe and should define a better one if material.
+for row in "${rows[@]}"; do
+  [[ "$row" == *'\"status\":\"FAIL\"'* ]] && exit 1
+done
