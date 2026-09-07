@@ -29,11 +29,13 @@ That remains intentional. A populated repository is not the goal. A candidate en
 One active PR is currently under admission review:
 
 - PR `#6` — **self-maintenance kit: rescue + variation ledger + baseline**;
-- live status: `ADMISSION_CANDIDATE / SINGLE_HOST_DRILL / OWNER_TRIGGERED_DOGFOOD / LIVE_RESTORE_NOT_YET_DRILLED`;
-- the corrected portable scripts distinguish drill-only extraction from live `--apply`, create a pre-restore snapshot, remove hard-coded DSH paths, and implement configurable retention;
-- admission remains blocked because the corrected live restore path has not yet been observed in a controlled live drill and the portable scripts still need a bounded smoke check.
+- live status: `ADMISSION_CANDIDATE / OWNER_TRIGGERED_DOGFOOD / SINGLE_REAL_HOST_DRY_RUN / PORTABLE_SMOKE_PASS / REAL_HOST_LIVE_RESTORE_NOT_YET_DRILLED`;
+- maintainer-run synthetic regression exposed and fixed configured-canary environment drift, false success/failure exit semantics, same-second snapshot collision, and retention deleting a selected restore source;
+- `kit/portable-smoke.sh` now exercises the reference implementation in a disposable synthetic HOME without asking the project owner to relay commands;
+- live `--apply` is explicitly **overlay restore**, not exact filesystem rollback; post-snapshot files absent from the archive are not deleted;
+- admission remains blocked because a real Agent/Host live recovery path has not yet been observed. Synthetic code-path success is not real-host recovery proof.
 
-Do not merge PR #6 as an admitted/proven recovery recipe merely because its current code is improved or because upstream ENA benefits from the same occurrence.
+Do not merge PR #6 as an admitted/proven recovery recipe merely because its current code is improved, its synthetic smoke passes, or upstream ENA benefits from the same occurrence.
 
 ## Latest upstream admission review
 
@@ -119,7 +121,7 @@ Good admission signals include:
 
 Active candidates:
 
-1. **self-maintenance kit / PR #6** — one real DSH/LXC occurrence; portable correction exists; next evidence boundary is controlled live restore + bounded portable smoke check; do not overclaim beyond one Host;
+1. **self-maintenance kit / PR #6** — one real DSH/LXC dry-run occurrence plus maintainer synthetic `PORTABLE_SMOKE_PASS`; current remaining evidence boundary is a real Agent/Host recovery use or controlled live recovery drill; overlay restore must not be confused with exact rollback;
 2. **source trust / selective permeability** — Metamemory mechanism evidence exists; wait for real field cases that distinguish update speed, inertia, scope, override, and revalidation conditions;
 3. **control retirement** — admit only if real changing-ecology use demonstrates a reusable trigger/action/monitor/reactivate pattern beyond the Current procedure;
 4. **inheritance carrier choice** — reopen only if real use distinguishes distilled rules, richer developmental context or no inheritance in a decision-relevant way;
@@ -131,7 +133,7 @@ There is no obligation to keep a candidate for every upstream research track or 
 
 Maintain PR #6 as the active concrete candidate while continuing to observe #208 and real Host/adopter use.
 
-For PR #6, the next decision-changing evidence is not more prose or another synthetic argument; it is whether the corrected live restore path works in a bounded controlled drill and whether the portable scripts survive a bounded smoke check without relying on DSH-specific assumptions.
+For PR #6, the portable/script-level work that can be self-executed is now covered by an executable regression. Do not ask the project owner to rerun those mechanical checks. The next decision-changing evidence is whether a **real Agent/Host** recovery path works and remains worth its operational cost; that evidence should arise from an appropriate real-use opportunity or a genuinely warranted controlled live drill, not from manufacturing more synthetic passes.
 
 Do not ask the human to perform mechanical repository or evidence-relay work that available Agent tooling can complete itself. Human participation should be reserved for genuinely irreducible Host/physical/authorization boundaries or decision-bearing judgment.
 
@@ -152,5 +154,6 @@ If yes and evidence is sufficient, add the smallest useful HOW and cite upstream
 - Do not duplicate `releases/current/` procedures or adopter documentation.
 - Do not import Human-AI Workbench collaboration/release method.
 - Do not treat upstream Current status as automatic Field Guide admission.
+- Do not treat synthetic portable regression as real-host recovery proof.
 - Do not preserve speculative admission queue items merely because they once appeared in a coverage map.
 - Prefer zero entries over premature doctrine.
