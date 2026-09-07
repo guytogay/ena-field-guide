@@ -1,7 +1,7 @@
 # Agent Self-Maintenance Kit — rescue + variation ledger + lightweight baseline
 
 Date: `2026-09-06`
-Status: `ADMISSION_CANDIDATE / SINGLE_HOST_DRILL / OWNER_TRIGGERED_DOGFOOD / LIVE_RESTORE_NOT_YET_DRILLED`
+Status: `ADMISSION_CANDIDATE / OWNER_TRIGGERED_DOGFOOD / SINGLE_REAL_HOST_DRY_RUN / PORTABLE_SMOKE_PASS / REAL_HOST_LIVE_RESTORE_NOT_YET_DRILLED`
 
 ## Why this candidate exists
 
@@ -47,9 +47,10 @@ snapshotting, versioning, audit or evaluation machinery; use that instead.
 
 | File | Function |
 |---|---|
-| `kit/rescue.sh` | configurable snapshot, snapshot list, restore drill, explicit live restore, canary hook |
+| `kit/rescue.sh` | configurable snapshot, snapshot list, restore drill, explicit live **overlay** restore, canary hook |
 | `kit/ledger.py` | append-only JSONL idea/mutation/observation/decision ledger with author/session stamp |
 | `kit/selftest.sh` | lightweight before/after Host smoke baseline |
+| `kit/portable-smoke.sh` | disposable synthetic-HOME regression for the kit itself |
 
 ### Example
 
@@ -71,7 +72,11 @@ kit/ledger.py add --kind mutation --source local --target ~/.dsh --summary "..."
 kit/rescue.sh restore ~/.ena-selfkit-rescue/rescue-*.tar.gz --to /tmp/restore-drill
 
 # Live restore is intentionally explicit and creates a pre-restore snapshot first.
+# It is an archive overlay, not an exact filesystem rollback.
 kit/rescue.sh restore <archive> --apply
+
+# Regression the reference implementation without touching real HOME.
+kit/portable-smoke.sh
 ```
 
 ## Trigger → action → monitor → stop
@@ -88,19 +93,22 @@ kit/rescue.sh restore <archive> --apply
 - snapshot only the decision-relevant local self-state;
 - run a Host-relevant canary/baseline;
 - keep untested ideas latent rather than editing the active self immediately;
-- use restore drill before relying on a restore path for material changes.
+- use restore drill before relying on a restore path for material changes;
+- treat `--apply` as overlay restore unless a stronger Host-native mechanism provides exact rollback.
 
 **Monitor**
 
-- canary/baseline result;
-- snapshot creation and retention;
+- canary/baseline result **and process exit status**;
+- snapshot creation, uniqueness and retention;
 - ledger continuity;
-- whether the configured state paths still match the real Host.
+- whether the configured state paths still match the real Host;
+- whether post-snapshot files remain after overlay restore and could still affect behavior.
 
 **Stop / revalidate**
 
 - canary/baseline failure: stop further mutation and diagnose/restore first;
 - Host layout, model/runtime, credential storage or self-state boundary changes;
+- exact rollback is required but only overlay extraction is available;
 - external effects are involved: local restore does not undo remote orders, messages or writes;
 - authorization is required: recoverability does not mint authority;
 - a Host-native mechanism already provides equal or better protection at lower cost.
@@ -114,7 +122,7 @@ Demonstrated on one DSH LXC Host:
   (`NO_DIFF_IN_SHARED_FILES`);
 - post-install canary returned `CANARY_OK`;
 - 3 ledger records were appended;
-- the original three smoke probes passed 3/3;
+- the original three smoke probes printed 3/3 PASS;
 - a daily 04:00 snapshot cron was installed on that Host.
 
 Important narrowing:
@@ -124,20 +132,65 @@ Important narrowing:
 - the original contributed `restore` command did not actually apply the archive to live state;
   the reference implementation in this PR was corrected so live restore now requires explicit
   `--apply` and takes a pre-restore snapshot first;
-- therefore `LIVE_RESTORE_NOT_YET_DRILLED` remains part of the admission status until a real
-  controlled restore drill is observed;
+- later maintainer regression found that the original `selftest.sh` success path returned exit code
+  1 and its FAIL detector searched for the wrong escaped JSON pattern. Both defects are now fixed;
+- therefore the original 3/3 printed PASS remains an occurrence observation, not proof that the old
+  shell exit contract was correct;
 - the original DSH implementation used DSH-specific paths/commands; the reference implementation
-  has been parameterized, but portability beyond the observed Host remains unproven.
+  is path-parameterized, but platform portability remains bounded to the current Linux/Bash/GNU-style
+  implementation unless further evidence exists.
+
+## Maintainer synthetic regression — 2026-09-07
+
+A successor maintainer ran the current candidate in a disposable synthetic HOME rather than asking
+the project owner to relay commands manually.
+
+The first run exposed that configured `CANARY_CMD` used `bash -lc`, which could replace the caller's
+HOME/environment. A later run exposed that `selftest.sh` could print all PASS while returning 1, and
+that its FAIL detector could miss real FAIL rows. Review also identified two recovery hazards before
+admission: same-second/same-label snapshot overwrite and retention potentially deleting the selected
+restore source during the pre-restore snapshot.
+
+Those defects were fixed on the PR branch, and a self-contained `kit/portable-smoke.sh` regression
+was added. Final synthetic regression returned:
+
+```text
+PORTABLE_SMOKE_PASS
+synthetic_live_apply=yes
+exact_rollback=no_overlay_only
+real_host_recovery_proven=no
+```
+
+The final smoke covers:
+
+- caller-environment canary;
+- positive selftest exit 0 and negative-canary exit 1;
+- ledger append/list and private mode;
+- same-second/same-label snapshot uniqueness;
+- invalid snapshot-label rejection;
+- restore drill isolation;
+- explicit synthetic live `--apply`;
+- pre-restore snapshot creation;
+- selected old archive remaining usable even when retention removes its original path;
+- explicit overlay semantics and survival of post-snapshot extra files;
+- implicit-restore rejection.
+
+This is decision-relevant evidence for the **reference code path**, but it is not a substitute for a
+real DSH/Agent Host recovery drill.
 
 ## Evidence boundaries
 
 ```text
 SNAPSHOT_CREATED != RECOVERY_PROVEN
-DRY_RUN_EXTRACTION_MATCH != LIVE_RESTORE_DRILLED
+DRY_RUN_EXTRACTION_MATCH != REAL_HOST_LIVE_RESTORE_DRILLED
+PORTABLE_SYNTHETIC_PASS != REAL_HOST_RECOVERY_PROVEN
+OVERLAY_RESTORE != EXACT_ROLLBACK
 RECOVERY_CAPABILITY != AUTHORIZATION
-LOCAL_ROLLBACK != EXTERNAL_EFFECT_ROLLBACK
+LOCAL_RESTORE != EXTERNAL_EFFECT_ROLLBACK
 ONE_HOST_SUCCESS != UNIVERSAL_FITNESS
 OWNER_TRIGGERED_DOGFOOD != SPONTANEOUS_AGENT_OPERATIONALIZATION
+PRINTED_PASS != SUCCESS_EXIT_STATUS
+PATH_PARAMETERIZED != UNIVERSAL_PLATFORM_PORTABILITY
 ```
 
 Snapshots may contain credentials or private configuration. Keep the rescue directory private
@@ -145,6 +198,12 @@ Snapshots may contain credentials or private configuration. Keep the rescue dire
 
 ## Admission question
 
-This candidate now has a concrete trigger/action/monitor/stop loop and one real Host drill, but the
-most important recovery claim still lacks a controlled live restore drill. Maintainer admission
-should therefore remain **candidate**, not promote this as a generally proven recovery recipe yet.
+This candidate now has a concrete trigger/action/monitor/stop loop, one real Host dry-run occurrence,
+and a maintainer-run synthetic live-apply regression that found and closed several implementation
+defects.
+
+The remaining admission boundary is narrower than before but still material: **a real Agent/Host live
+recovery path has not yet been observed, and overlay restore must not be marketed as exact rollback.**
+
+Maintainer admission should therefore remain **candidate**, not promote this as a generally proven
+recovery recipe yet.
