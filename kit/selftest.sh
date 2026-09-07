@@ -61,5 +61,9 @@ fi
 
 # A FAIL is a signal; SKIP means this Host lacks that probe and should define a better one if material.
 for row in "${rows[@]}"; do
-  [[ "$row" == *'\"status\":\"FAIL\"'* ]] && exit 1
+  if [[ "$row" == *'\"status\":\"FAIL\"'* ]]; then
+    exit 1
+  fi
 done
+
+exit 0
