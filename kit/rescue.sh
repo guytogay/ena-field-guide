@@ -4,7 +4,7 @@
 #   rescue.sh snapshot [label]
 #   rescue.sh list
 #   rescue.sh restore <archive> --to <DIR>   # drill only; never touches live HOME
-#   rescue.sh restore <archive> --apply      # explicit live restore
+#   rescue.sh restore <archive> --apply      # explicit live overlay restore
 #   rescue.sh canary
 set -euo pipefail
 
@@ -75,14 +75,19 @@ restore_apply() {
   local file="$1"
   # A pre-restore snapshot gives the restore itself a rollback point.
   snapshot pre-restore
+  # This is intentionally an archive overlay, not an exact filesystem rollback:
+  # files absent from the selected archive are not deleted from live HOME.
   tar xzf "$file" -C "$HOME"
   echo "RESTORE_APPLIED $file -> $HOME"
+  echo "RESTORE_MODE overlay (files absent from archive are not deleted)"
   echo "Run canary and any Host-specific baseline before resuming consequential work."
 }
 
 run_canary() {
   if [[ -n "$CANARY_CMD" ]]; then
-    if bash -lc "$CANARY_CMD"; then echo "CANARY_OK"; else echo "CANARY_FAIL"; return 1; fi
+    # Preserve the caller's environment. A login shell may rewrite HOME/PATH and make
+    # a configured Host-native canary test a different environment than the live Agent.
+    if bash -c "$CANARY_CMD"; then echo "CANARY_OK"; else echo "CANARY_FAIL"; return 1; fi
     return
   fi
   if command -v dsh >/dev/null 2>&1; then
