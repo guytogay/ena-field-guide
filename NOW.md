@@ -52,7 +52,7 @@ Why:
 - the practical self-maintenance occurrence is already represented separately as PR #6 and must earn admission on its own evidence, not inherit release status.
 
 ```text
-UPSTREAM PRODUCT_FIX != DOWNSTREAM FIELD HOW
+UPSTREAM PRODUCT FIX != DOWNSTREAM FIELD HOW
 UPSTREAM RELEASE != FIELD-GUIDE ADMISSION
 AVAILABLE_RESOURCE != ADMISSION_OBLIGATION
 ```
