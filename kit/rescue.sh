@@ -12,7 +12,8 @@ RESCUE_DIR="${RESCUE_DIR:-$HOME/.ena-selfkit-rescue}"
 KEEP_SNAPSHOTS="${KEEP_SNAPSHOTS:-7}"
 SELF_STATE_PATHS="${SELF_STATE_PATHS:-.dsh .ssh .config}"
 CANARY_CMD="${CANARY_CMD:-}"
-TS="$(date +%Y%m%d-%H%M%S)"
+# PID suffix prevents same-second/same-label invocations from overwriting one another.
+TS="$(date +%Y%m%d-%H%M%S)-$$"
 
 EXCLUDE=(
   --exclude='.dsh/sessions' --exclude='.dsh/mcp' --exclude='.dsh/attachments'
@@ -29,6 +30,11 @@ existing_paths() {
 
 snapshot() {
   local label="${1:-manual}"
+  [[ "$label" =~ ^[A-Za-z0-9._-]+$ ]] || {
+    echo "SNAPSHOT_FAIL label must match [A-Za-z0-9._-]+"
+    return 2
+  }
+
   local paths=()
   while IFS= read -r p; do paths+=("$p"); done < <(existing_paths)
   ((${#paths[@]} > 0)) || { echo "SNAPSHOT_FAIL no configured SELF_STATE_PATHS exist under HOME"; return 2; }
@@ -73,14 +79,29 @@ restore_drill() {
 
 restore_apply() {
   local file="$1"
+
+  # Protect the selected source before taking the pre-restore snapshot. Snapshot
+  # retention may otherwise delete an older selected rescue archive before tar reads it.
+  mkdir -p "$RESCUE_DIR"
+  chmod 700 "$RESCUE_DIR"
+  local restore_source
+  restore_source="$(mktemp "$RESCUE_DIR/.restore-source.XXXXXX.tar.gz")"
+  chmod 600 "$restore_source"
+  cp -- "$file" "$restore_source"
+  trap 'rm -f -- "$restore_source"' EXIT
+
   # A pre-restore snapshot gives the restore itself a rollback point.
   snapshot pre-restore
+
   # This is intentionally an archive overlay, not an exact filesystem rollback:
   # files absent from the selected archive are not deleted from live HOME.
-  tar xzf "$file" -C "$HOME"
+  tar xzf "$restore_source" -C "$HOME"
   echo "RESTORE_APPLIED $file -> $HOME"
   echo "RESTORE_MODE overlay (files absent from archive are not deleted)"
   echo "Run canary and any Host-specific baseline before resuming consequential work."
+
+  rm -f -- "$restore_source"
+  trap - EXIT
 }
 
 run_canary() {
