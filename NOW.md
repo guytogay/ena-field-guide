@@ -14,7 +14,7 @@ ENA research / field evidence
 
 ## Current admission state
 
-No standalone HOW entry has been fully admitted yet.
+No standalone HOW entry has been admitted yet.
 
 That remains intentional. A populated repository is not the goal. A candidate entry must have:
 
@@ -26,66 +26,56 @@ That remains intentional. A populated repository is not the goal. A candidate en
 - practical value outside the originating experiment/session;
 - enough independence from upstream ENA that the entry remains useful without duplicating the package.
 
-## Current candidate: agent self-maintenance kit
+One active PR is currently under admission review:
 
-Status:
+- PR `#6` — **self-maintenance kit: rescue + variation ledger + baseline**;
+- live status: `ADMISSION_CANDIDATE / OWNER_TRIGGERED_DOGFOOD / SINGLE_REAL_HOST_DRY_RUN / PORTABLE_SMOKE_PASS / REAL_HOST_LIVE_RESTORE_NOT_YET_DRILLED`;
+- maintainer-run synthetic regression exposed and fixed configured-canary environment drift, false success/failure exit semantics, same-second snapshot collision, and retention deleting a selected restore source;
+- `kit/portable-smoke.sh` now exercises the reference implementation in a disposable synthetic HOME without asking the project owner to relay commands;
+- live `--apply` is explicitly **overlay restore**, not exact filesystem rollback; post-snapshot files absent from the archive are not deleted;
+- admission remains blocked because a real Agent/Host live recovery path has not yet been observed. Synthetic code-path success is not real-host recovery proof.
 
-`ADMISSION_CANDIDATE / SINGLE_HOST_DRILL / OWNER_TRIGGERED_DOGFOOD / LIVE_RESTORE_NOT_YET_DRILLED`
+Do not merge PR #6 as an admitted/proven recovery recipe merely because its current code is improved, its synthetic smoke passes, or upstream ENA benefits from the same occurrence.
 
-The candidate combines three small functions:
+## Latest upstream admission review
 
-```text
-local snapshot / restore drill / canary
-+ durable idea/mutation ledger
-+ lightweight before/after smoke baseline
-```
+### ENA Current v0.3.14
 
-The full conversation narrows its provenance:
+Upstream ENA is currently `v0.3.14 / CURRENT / FIELD_VALIDATION`. v0.3.13 added the executable Minimum Evolution Loop and bounded local operationalization; v0.3.14 surfaced the existing Local Projection persistence cue in the minimum adoption path. The evolutionary-memory mechanism-discrimination campaign is closed.
 
-- the owner reported that the larger ENA project felt "骑虎难下";
-- the owner questioned whether ENA controls such as the lease loop actually paid rent;
-- the owner explicitly asked whether ENA lacked support for helping the Agent itself evolve;
-- that question triggered the DSH Agent to inspect its LXC Host;
-- the DSH Agent then proposed rescue + ledger + baseline organs and implemented them after owner authorization.
+Field Guide disposition for the release itself: **no standalone release-derived entry**.
 
-Therefore:
+Why:
 
-```text
-OWNER_TRIGGERED_HOST_AUDIT != OWNER_DESIGNED_ORGANS
-OWNER_TRIGGERED_DOGFOOD != SPONTANEOUS_AGENT_OPERATIONALIZATION
-```
-
-Reality contact on the originating DSH/LXC Host demonstrated:
-
-- snapshot creation (28 MB, mode 0600);
-- archive extraction to a drill directory with no diff in shared live files;
-- canary success;
-- 3 durable ledger records;
-- original smoke baseline 3/3 PASS;
-- a daily snapshot cron installed on that Host.
-
-Maintainer review found that the original contributed `restore <file>` path did **not** actually apply the archive to live `$HOME`, despite the entry describing a live restore command. The branch implementation has now been corrected so live restore requires explicit `--apply` and creates a pre-restore snapshot; Host paths/canary/author/baseline storage have also been parameterized rather than hard-coded to `/home/dsh`.
-
-But code existence is not recovery evidence. A controlled live restore drill has not yet been observed, so the entry remains a candidate.
+- release/adoption semantics and the Current package remain upstream ENA responsibilities;
+- project-working/release lessons remain Human-AI Workbench responsibilities;
+- the practical self-maintenance occurrence is already represented separately as PR #6 and must earn admission on its own evidence, not inherit release status.
 
 ```text
-SNAPSHOT_CREATED != RECOVERY_PROVEN
-DRY_RUN_EXTRACTION_MATCH != LIVE_RESTORE_DRILLED
-RECOVERY != AUTHORIZATION
-LOCAL_ROLLBACK != EXTERNAL_EFFECT_ROLLBACK
-ONE_HOST_SUCCESS != UNIVERSAL_FITNESS
+UPSTREAM PRODUCT_FIX != DOWNSTREAM FIELD HOW
+UPSTREAM RELEASE != FIELD-GUIDE ADMISSION
+AVAILABLE_RESOURCE != ADMISSION_OBLIGATION
 ```
 
-See:
+Issue #208 remains version-neutral and follows Current. Future successors can continue producing field evidence in the same stream without creating a Field Guide candidate merely because the version changes.
 
-- `entries/2026-09-06-agent-self-maintenance-kit.md`
-- `kit/`
+## Current upstream evidence review
 
-## Upstream evidence review
+### Developmental Inheritance / MDS
+
+Useful inheritance was demonstrated in the Morrow synthetic fixture, but full archive, distilled rules and MDS all transferred the tested phenotype. MDS-specific superiority was not observed.
+
+Disposition: **do not publish an MDS-is-best recipe**.
+
+### Temporal Assimilation / Developmental Order v1
+
+No stable arm-specific developmental-order effect or persistent developmental debt was observed. The acquisition fixture was underidentified.
+
+Disposition: **do not publish a developmental-order / critical-period recipe from this experiment**.
 
 ### Metamemory Update Policy v1
 
-The frozen four-arm primary is complete. Formal disposition:
+The frozen four-arm primary is complete. All four runs reconstructed their assigned state correctly, no preregistered replication trigger fired, and the formal disposition is:
 
 ```text
 MECHANISM_ACTIVE_BUT_POLICY_OPTIMUM_UNRESOLVED
@@ -93,39 +83,69 @@ FIELD_UNRESOLVED_FOR_DURABLE_SELF_MODIFICATION
 NO_CURRENT_SEMANTIC_CHANGE
 ```
 
-Field Guide disposition: **no source-trust / selective-permeability HOW yet**. Synthetic mechanism evidence does not establish a real operating threshold or override/revalidation policy.
+The experiment supports that update policy, context scope, and reversal inertia can produce different downstream error profiles over the same object-level history. It does **not** establish C1, C2, a threshold of three observations, or any other tested policy as generally optimal.
 
-### Current ENA reality contact
+Field Guide disposition: **no source-trust / selective-permeability HOW yet**.
 
-Upstream Issue `#208` remains the version-neutral field stream. Recent DSH evidence has been useful for two different reasons:
+Reason: a synthetic mechanism result is not enough to tell a real operator when to update trust, how much inertia to use, what evidence should override an incumbent, or when a policy should be reversed in a real Host. Admission now requires real field cases that expose those trigger/action/monitor/stop boundaries.
 
-- salience probes on a high-reasoning model were non-discriminating and were reconciled with narrowing rather than promoted into a positive claim;
-- owner-triggered Host inspection exposed the practical gap between evolution vocabulary and an executable evolution loop / local organs.
+```text
+MECHANISM_DEMONSTRATED != OPERATING_POLICY_EARNED
+POLICY_TRADEOFF_OBSERVED != UNIVERSAL_THRESHOLD_JUSTIFIED
+```
 
-The upstream product contract belongs upstream. This Field Guide candidate is only the concrete Host practice; it must not mirror the full ENA evolution loop.
+### Existing Current operational procedures
 
-## Other admission queue items
+ENA Current already exposes practical procedures such as control retirement, standing input, purpose-relative continuity, and the Minimum Evolution Loop.
 
-1. **source trust / selective permeability** — wait for real field cases that distinguish update speed, inertia, scope, override, and revalidation conditions;
-2. **control retirement** — admit only if changing-ecology use demonstrates a reusable trigger/action/monitor/reactivate pattern beyond the upstream procedure;
-3. **inheritance carrier choice** — reopen only if real use distinguishes distilled rules, richer developmental context or no inheritance in a decision-relevant way;
-4. **new #208 field pattern** — any genuinely recurring operating problem may enter without belonging to a pre-existing research metaphor.
+Their existence does not justify duplicated Field Guide entries. A separate entry becomes worthwhile only when real-use evidence adds a clearer trigger/action/monitor/stop pattern that remains useful without loading the upstream package.
+
+## Active evidence source
+
+Watch upstream Current field stream:
+
+`guytogay/evolution-native-agent-architecture#208`
+
+Also watch real downstream operating candidates such as PR #6. The Field Guide maintainer should independently verify candidate evidence and not infer admission from upstream release status.
+
+Good admission signals include:
+
+- the same practical failure appears in more than one real context;
+- operators repeatedly need the same bounded response;
+- a single-Host mechanism passes the specific missing reality check needed for its claimed scope;
+- an upstream procedure is correct but too package-specific to serve as a standalone operating card;
+- real use exposes when the procedure should **not** be used;
+- monitoring and revalidation conditions become observable.
+
+## Admission queue
+
+Active candidates:
+
+1. **self-maintenance kit / PR #6** — one real DSH/LXC dry-run occurrence plus maintainer synthetic `PORTABLE_SMOKE_PASS`; current remaining evidence boundary is a real Agent/Host recovery use or controlled live recovery drill; overlay restore must not be confused with exact rollback;
+2. **source trust / selective permeability** — Metamemory mechanism evidence exists; wait for real field cases that distinguish update speed, inertia, scope, override, and revalidation conditions;
+3. **control retirement** — admit only if real changing-ecology use demonstrates a reusable trigger/action/monitor/reactivate pattern beyond the Current procedure;
+4. **inheritance carrier choice** — reopen only if real use distinguishes distilled rules, richer developmental context or no inheritance in a decision-relevant way;
+5. **new #208 field pattern** — any genuinely recurring operating problem may enter without belonging to a pre-existing research metaphor.
 
 There is no obligation to keep a candidate for every upstream research track or release.
 
 ## Exact next action
 
-For the self-maintenance candidate:
+Maintain PR #6 as the active concrete candidate while continuing to observe #208 and real Host/adopter use.
 
-1. run a controlled **live local restore drill** with the corrected `--apply` path on a disposable/recoverable test state;
-2. run the corrected portable scripts' own smoke checks;
-3. only then decide whether the recovery portion has earned admission or should remain a candidate.
+For PR #6, the portable/script-level work that can be self-executed is now covered by an executable regression. Do not ask the project owner to rerun those mechanical checks. The next decision-changing evidence is whether a **real Agent/Host** recovery path works and remains worth its operational cost; that evidence should arise from an appropriate real-use opportunity or a genuinely warranted controlled live drill, not from manufacturing more synthetic passes.
+
+Do not ask the human to perform mechanical repository or evidence-relay work that available Agent tooling can complete itself. Human participation should be reserved for genuinely irreducible Host/physical/authorization boundaries or decision-bearing judgment.
 
 For every proposed entry ask:
 
 > If the upstream theory/package link disappeared, would this still tell an Agent/operator what to do, when not to do it, what to watch, and when to revalidate?
 
-If no, leave it upstream. If yes but evidence is weak, keep it as a candidate rather than doctrine.
+If no, leave it upstream.
+
+If yes but evidence is weak, keep it as a candidate rather than doctrine.
+
+If yes and evidence is sufficient, add the smallest useful HOW and cite upstream provenance instead of copying research history.
 
 ## Do not overgrow
 
@@ -133,5 +153,7 @@ If no, leave it upstream. If yes but evidence is weak, keep it as a candidate ra
 - Do not turn negative/narrowing results into positive recipes.
 - Do not duplicate `releases/current/` procedures or adopter documentation.
 - Do not import Human-AI Workbench collaboration/release method.
-- Do not call a dry-run extraction a proven live restore.
-- Prefer zero admitted entries over premature doctrine.
+- Do not treat upstream Current status as automatic Field Guide admission.
+- Do not treat synthetic portable regression as real-host recovery proof.
+- Do not preserve speculative admission queue items merely because they once appeared in a coverage map.
+- Prefer zero entries over premature doctrine.
