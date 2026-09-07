@@ -1,158 +1,175 @@
-# Agent Self-Maintenance Kit — rescue + variation ledger + lightweight baseline
+# Agent Self-Maintenance Kit — snapshot + canary + ledger + restore drill
 
 Date: `2026-09-06`
-Status: `ADMISSION_CANDIDATE / OWNER_TRIGGERED_DOGFOOD / SINGLE_REAL_HOST_DRY_RUN / PORTABLE_SMOKE_PASS / REAL_HOST_LIVE_RESTORE_NOT_YET_DRILLED`
+Status: `ADMITTED_BOUNDED_HOW / OWNER_TRIGGERED_DOGFOOD / SINGLE_REAL_HOST_DRY_RUN / PORTABLE_SMOKE_PASS`
 
-## Why this candidate exists
+## What this HOW actually claims
 
-The recurring practical problem is simple: an Agent that durably modifies its own configuration
-can damage the same environment it would need in order to repair itself; useful ideas can also die
-with a session, and self-change is hard to evaluate without a before/after reference.
-
-The full conversation matters for provenance. This kit did **not** emerge spontaneously from merely
-loading ENA. The owner first questioned whether ENA was becoming too much machinery, then explicitly
-asked whether it lacked support for helping the Agent itself evolve. That question caused the DSH
-Agent to inspect its LXC Host, identify missing local organs, propose this three-part kit, and build
-it after owner authorization.
-
-So this is real dogfood and real Host contact, but it is **owner-triggered**, not proof that semantic
-adoption alone makes Agents operationalize the right HOW.
-
-Upstream inspiration is ENA recovery/evolution semantics; this entry must still stand on its own if
-that upstream repository disappears.
-
-## The HOW
-
-For durable local self-change, use the smallest applicable subset of this loop:
+Use a small self-maintenance loop before and after durable local Agent/Host self-change:
 
 ```text
-1. snapshot before change
-2. run a cheap canary / smoke baseline
-3. make the bounded change
-4. run canary / baseline again
-5. append the idea/change/outcome to a durable local ledger
-6. if the result is bad or uncertain, drill or perform local restore as appropriate
+snapshot decision-relevant self-state
+-> run a cheap Host-relevant canary/baseline
+-> make the bounded change
+-> run the canary/baseline again
+-> record the idea/change/outcome durably
+-> drill restore before relying on it
+```
+
+This entry is admitted for that bounded workflow and for the included Linux/Bash reference implementation.
+
+It is **not** admitted as proof that a real Agent Host has completed reliable live recovery, and it is not an exact-filesystem rollback system.
+
+```text
+SNAPSHOT_CREATED != RECOVERY_PROVEN
+DRY_RUN_EXTRACTION_MATCH != REAL_HOST_LIVE_RESTORE_DRILLED
+PORTABLE_SYNTHETIC_PASS != REAL_HOST_RECOVERY_PROVEN
+OVERLAY_RESTORE != EXACT_ROLLBACK
+```
+
+## Why this entry exists
+
+A durable self-change can damage the same environment an Agent needs to repair itself. Useful improvement ideas can also disappear with a session, and a change is difficult to evaluate without a before/after reference.
+
+This pattern came from real owner-triggered dogfood on one DSH/LXC Host. The owner asked whether ENA lacked support for helping an Agent itself evolve; the Agent inspected its Host, identified missing local organs, proposed rescue + durable variation ledger + lightweight baseline, and implemented them after authorization.
+
+That provenance matters:
+
+```text
+OWNER_TRIGGERED_DOGFOOD != SPONTANEOUS_AGENT_OPERATIONALIZATION
+ONE_HOST_SUCCESS != UNIVERSAL_FITNESS
+```
+
+## Trigger
+
+Use the smallest applicable subset when:
+
+- durable local self-configuration is about to change;
+- an improvement idea should survive the current session without being activated immediately;
+- a previous self-change needs a before/after comparison;
+- a restore path is being relied on and needs a drill.
+
+Prefer an existing Host-native snapshot/versioning/audit/evaluation mechanism when it provides equal or stronger protection at lower cost.
+
+## Action
+
+### 1. Snapshot only the decision-relevant local self-state
+
+```bash
+export SELF_STATE_PATHS='.dsh .ssh .config'
+kit/rescue.sh snapshot before-change
+```
+
+Do not automatically snapshot an entire HOME when only a smaller state surface is decision-relevant.
+
+### 2. Run a Host-relevant canary or baseline
+
+```bash
+export CANARY_CMD='dsh --profile headless "只回答数字 42" | grep -q 42'
+kit/rescue.sh canary
+kit/selftest.sh --baseline before-change
+```
+
+A baseline is only as meaningful as the probes it contains.
+
+### 3. Make the bounded change, then measure again
+
+```bash
+# ... bounded local change ...
+kit/rescue.sh canary
+kit/selftest.sh --baseline after-change
+```
+
+### 4. Preserve the variation/outcome durably
+
+```bash
+kit/ledger.py add --kind mutation --source local --target ~/.dsh --summary "..." --state expressed
 ```
 
 For an idea that should survive without immediate mutation:
 
-```text
-ledger.py add --kind idea --source <source> --summary "..." --state latent
+```bash
+kit/ledger.py add --kind idea --source self-review --summary "..." --state latent
 ```
 
-This is deliberately not a universal Agent runtime. A Host may already have better native
-snapshotting, versioning, audit or evaluation machinery; use that instead.
+### 5. Drill restore before relying on it
+
+```bash
+kit/rescue.sh list
+kit/rescue.sh restore <archive> --to /tmp/restore-drill
+```
+
+`--to` extracts into an isolated destination and does not modify live HOME.
+
+The reference implementation also provides an explicit live helper:
+
+```bash
+kit/rescue.sh restore <archive> --apply
+```
+
+`--apply` creates a pre-restore snapshot and then overlays archived files onto HOME. It is intentionally explicit and is covered by the synthetic regression described below.
+
+**Do not interpret it as exact rollback.** Files created after the snapshot but absent from the archive remain present. When exact rollback is required, use a Host-native mechanism that actually provides it or a separately justified cleanup procedure.
 
 ## Included reference implementation
 
 | File | Function |
 |---|---|
-| `kit/rescue.sh` | configurable snapshot, snapshot list, restore drill, explicit live **overlay** restore, canary hook |
-| `kit/ledger.py` | append-only JSONL idea/mutation/observation/decision ledger with author/session stamp |
+| `kit/rescue.sh` | configurable snapshot/list/restore drill, explicit live overlay restore, canary hook |
+| `kit/ledger.py` | append-only JSONL idea/mutation/observation/decision ledger |
 | `kit/selftest.sh` | lightweight before/after Host smoke baseline |
 | `kit/portable-smoke.sh` | disposable synthetic-HOME regression for the kit itself |
 
-### Example
+Current implementation scope is Bash 4+ / Linux-GNU-style tooling. Path parameterization does not establish macOS/BSD/arbitrary POSIX portability.
 
-```bash
-# Configure what actually represents durable self-state on this Host.
-export SELF_STATE_PATHS='.dsh .ssh .config'
-export CANARY_CMD='dsh --profile headless "只回答数字 42" | grep -q 42'
+## Monitor
 
-kit/rescue.sh snapshot before-change
-kit/selftest.sh --baseline before-change
+Watch:
 
-# ... bounded local change ...
-
-kit/rescue.sh canary
-kit/selftest.sh --baseline after-change
-kit/ledger.py add --kind mutation --source local --target ~/.dsh --summary "..." --state expressed
-
-# Restore drill: extract elsewhere and compare; never modifies live HOME.
-kit/rescue.sh restore ~/.ena-selfkit-rescue/rescue-*.tar.gz --to /tmp/restore-drill
-
-# Live restore is intentionally explicit and creates a pre-restore snapshot first.
-# It is an archive overlay, not an exact filesystem rollback.
-kit/rescue.sh restore <archive> --apply
-
-# Regression the reference implementation without touching real HOME.
-kit/portable-smoke.sh
-```
-
-## Trigger → action → monitor → stop
-
-**Trigger**
-
-- durable self-configuration is about to change;
-- a self-improvement idea should survive the current session;
-- a previous self-change needs before/after comparison;
-- recovery capability needs a drill.
-
-**Action**
-
-- snapshot only the decision-relevant local self-state;
-- run a Host-relevant canary/baseline;
-- keep untested ideas latent rather than editing the active self immediately;
-- use restore drill before relying on a restore path for material changes;
-- treat `--apply` as overlay restore unless a stronger Host-native mechanism provides exact rollback.
-
-**Monitor**
-
-- canary/baseline result **and process exit status**;
-- snapshot creation, uniqueness and retention;
+- canary/baseline output **and process exit status**;
+- snapshot creation, uniqueness, private permissions and retention;
 - ledger continuity;
-- whether the configured state paths still match the real Host;
-- whether post-snapshot files remain after overlay restore and could still affect behavior.
+- whether configured state paths still represent the real Host self-state;
+- whether an overlay restore leaves post-snapshot files that can still affect behavior;
+- operational cost relative to the protection gained.
 
-**Stop / revalidate**
+## Stop / revalidate
 
-- canary/baseline failure: stop further mutation and diagnose/restore first;
-- Host layout, model/runtime, credential storage or self-state boundary changes;
+Stop mutation or revalidate this HOW when:
+
+- canary/baseline fails;
+- Host layout, runtime/model, credential storage or self-state boundary changes;
 - exact rollback is required but only overlay extraction is available;
-- external effects are involved: local restore does not undo remote orders, messages or writes;
-- authorization is required: recoverability does not mint authority;
-- a Host-native mechanism already provides equal or better protection at lower cost.
+- external effects are involved — local state restore cannot undo remote orders/messages/API writes;
+- actual authority is missing — recoverability does not mint authorization;
+- a Host-native mechanism already provides stronger/equal protection at lower cost.
 
-## Evidence from 2026-09-06 DSH/LXC occurrence
+## Evidence
 
-Demonstrated on one DSH LXC Host:
+### 2026-09-06 — real DSH/LXC occurrence
 
-- a 28 MB mode-0600 snapshot was created;
-- archive extraction to a temporary drill location matched live shared configuration files
-  (`NO_DIFF_IN_SHARED_FILES`);
+Observed:
+
+- 28 MB mode-0600 snapshot created;
+- archive extraction to a temporary drill location matched live shared configuration files (`NO_DIFF_IN_SHARED_FILES`);
 - post-install canary returned `CANARY_OK`;
-- 3 ledger records were appended;
-- the original three smoke probes printed 3/3 PASS;
+- three ledger records appended;
+- original three smoke probes printed 3/3 PASS;
 - a daily 04:00 snapshot cron was installed on that Host.
 
-Important narrowing:
+This demonstrates real snapshot creation, archive-fidelity dry-run, canary and ledger use. It does **not** demonstrate a live destructive restore of that Host.
 
-- this demonstrated **snapshot creation + archive fidelity in a dry-run extraction**, not a live
-  destructive restore of `$HOME`;
-- the original contributed `restore` command did not actually apply the archive to live state;
-  the reference implementation in this PR was corrected so live restore now requires explicit
-  `--apply` and takes a pre-restore snapshot first;
-- later maintainer regression found that the original `selftest.sh` success path returned exit code
-  1 and its FAIL detector searched for the wrong escaped JSON pattern. Both defects are now fixed;
-- therefore the original 3/3 printed PASS remains an occurrence observation, not proof that the old
-  shell exit contract was correct;
-- the original DSH implementation used DSH-specific paths/commands; the reference implementation
-  is path-parameterized, but platform portability remains bounded to the current Linux/Bash/GNU-style
-  implementation unless further evidence exists.
+### 2026-09-07 — maintainer synthetic regression
 
-## Maintainer synthetic regression — 2026-09-07
+Maintainer testing in a disposable synthetic HOME first exposed and then fixed:
 
-A successor maintainer ran the current candidate in a disposable synthetic HOME rather than asking
-the project owner to relay commands manually.
+- configured canary environment drift caused by login-shell execution;
+- `selftest.sh` printing PASS while returning exit code 1;
+- a FAIL detector matching the wrong escaped JSON form;
+- same-second/same-label snapshot overwrite;
+- retention deleting the selected old restore source during pre-restore snapshot creation.
 
-The first run exposed that configured `CANARY_CMD` used `bash -lc`, which could replace the caller's
-HOME/environment. A later run exposed that `selftest.sh` could print all PASS while returning 1, and
-that its FAIL detector could miss real FAIL rows. Review also identified two recovery hazards before
-admission: same-second/same-label snapshot overwrite and retention potentially deleting the selected
-restore source during the pre-restore snapshot.
-
-Those defects were fixed on the PR branch, and a self-contained `kit/portable-smoke.sh` regression
-was added. Final synthetic regression returned:
+The final `kit/portable-smoke.sh` run returned:
 
 ```text
 PORTABLE_SMOKE_PASS
@@ -161,22 +178,7 @@ exact_rollback=no_overlay_only
 real_host_recovery_proven=no
 ```
 
-The final smoke covers:
-
-- caller-environment canary;
-- positive selftest exit 0 and negative-canary exit 1;
-- ledger append/list and private mode;
-- same-second/same-label snapshot uniqueness;
-- invalid snapshot-label rejection;
-- restore drill isolation;
-- explicit synthetic live `--apply`;
-- pre-restore snapshot creation;
-- selected old archive remaining usable even when retention removes its original path;
-- explicit overlay semantics and survival of post-snapshot extra files;
-- implicit-restore rejection.
-
-This is decision-relevant evidence for the **reference code path**, but it is not a substitute for a
-real DSH/Agent Host recovery drill.
+The regression covers positive/negative exit semantics, ledger append/list/private mode, snapshot uniqueness, invalid-label rejection, restore-drill isolation, explicit synthetic `--apply`, pre-restore snapshot creation, selected-source protection under retention, overlay semantics, survival of post-snapshot extra files, and rejection of implicit restore.
 
 ## Evidence boundaries
 
@@ -193,17 +195,12 @@ PRINTED_PASS != SUCCESS_EXIT_STATUS
 PATH_PARAMETERIZED != UNIVERSAL_PLATFORM_PORTABILITY
 ```
 
-Snapshots may contain credentials or private configuration. Keep the rescue directory private
-(0700) and archives/ledger private (0600); do not push them into public repositories.
+Snapshots may contain credentials/private configuration. Keep the rescue directory private (0700), archives and ledger private (0600), and do not commit them to public repositories.
 
-## Admission question
+## Admission decision
 
-This candidate now has a concrete trigger/action/monitor/stop loop, one real Host dry-run occurrence,
-and a maintainer-run synthetic live-apply regression that found and closed several implementation
-defects.
+**Admitted, with bounded claims.**
 
-The remaining admission boundary is narrower than before but still material: **a real Agent/Host live
-recovery path has not yet been observed, and overlay restore must not be marketed as exact rollback.**
+The demonstrated product value is the pre/post self-maintenance workflow plus a regression-tested reference implementation for snapshotting, canary/baseline measurement, durable variation logging and restore drilling. That value is useful now and does not need to wait for a real live recovery event.
 
-Maintainer admission should therefore remain **candidate**, not promote this as a generally proven
-recovery recipe yet.
+The unobserved claim — reliable real-Agent/Host live recovery — is explicitly **not made**. If a future real recovery occurrence provides new evidence, that is a new field occurrence and may justify expanding or revising this entry; it is not pending work required for the present admission.
