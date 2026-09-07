@@ -23,7 +23,8 @@ record() {
 }
 
 if [[ -n "$CANARY_CMD" ]]; then
-  if bash -lc "$CANARY_CMD" >/dev/null 2>&1; then record canary PASS; else record canary FAIL; fi
+  # Preserve the caller's environment; a login shell may rewrite HOME/PATH.
+  if bash -c "$CANARY_CMD" >/dev/null 2>&1; then record canary PASS; else record canary FAIL; fi
 elif command -v dsh >/dev/null 2>&1; then
   if bash -c 'cd /tmp && dsh --profile headless "只回答数字 42" 2>/dev/null | tr -d "[:space:]" | grep -q 42' >/dev/null 2>&1; then
     record canary PASS
