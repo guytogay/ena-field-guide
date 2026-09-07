@@ -16,9 +16,7 @@ ENA research / field evidence
 
 No standalone HOW entry has been admitted yet.
 
-That remains intentional after ENA v0.3.10 and the formal closure of the current evolutionary-memory mechanism-discrimination campaign.
-
-A populated repository is not the goal. A candidate entry must have:
+That remains intentional. A populated repository is not the goal. A candidate entry must have:
 
 - a recurring or materially real problem;
 - concrete reusable action;
@@ -28,27 +26,36 @@ A populated repository is not the goal. A candidate entry must have:
 - practical value outside the originating experiment/session;
 - enough independence from upstream ENA that the entry remains useful without duplicating the package.
 
+One active PR is currently under admission review:
+
+- PR `#6` — **self-maintenance kit: rescue + variation ledger + baseline**;
+- live status: `ADMISSION_CANDIDATE / SINGLE_HOST_DRILL / OWNER_TRIGGERED_DOGFOOD / LIVE_RESTORE_NOT_YET_DRILLED`;
+- the corrected portable scripts distinguish drill-only extraction from live `--apply`, create a pre-restore snapshot, remove hard-coded DSH paths, and implement configurable retention;
+- admission remains blocked because the corrected live restore path has not yet been observed in a controlled live drill and the portable scripts still need a bounded smoke check.
+
+Do not merge PR #6 as an admitted/proven recovery recipe merely because its current code is improved or because upstream ENA benefits from the same occurrence.
+
 ## Latest upstream admission review
 
-### ENA v0.3.10
+### ENA Current v0.3.14
 
-v0.3.10 is an R0 publication-coherence successor. It preserves the 38-ID Constitution and core behavior while making stable English cold semantics version-neutral by default, preserving genuine historical provenance, and extending recurrence checks against stale active release identity.
+Upstream ENA is currently `v0.3.14 / CURRENT / FIELD_VALIDATION`. v0.3.13 added the executable Minimum Evolution Loop and bounded local operationalization; v0.3.14 surfaced the existing Local Projection persistence cue in the minimum adoption path. The evolutionary-memory mechanism-discrimination campaign is closed.
 
-Field Guide disposition: **no standalone entry**.
+Field Guide disposition for the release itself: **no standalone release-derived entry**.
 
 Why:
 
-- the evidence concerns how ENA itself is packaged, published, versioned, and kept coherent;
-- the canonical product contract belongs upstream in ENA Current;
-- the reusable project-working lessons about staged publication, readback, risk-proportional progression, and synchronization debt belong in `human-ai-workbench`;
-- there is still no demonstrated downstream operating case where a separate Field Guide card changes what an Agent/operator should do in a real Host.
+- release/adoption semantics and the Current package remain upstream ENA responsibilities;
+- project-working/release lessons remain Human-AI Workbench responsibilities;
+- the practical self-maintenance occurrence is already represented separately as PR #6 and must earn admission on its own evidence, not inherit release status.
 
 ```text
 UPSTREAM PRODUCT FIX != DOWNSTREAM FIELD HOW
+UPSTREAM RELEASE != FIELD-GUIDE ADMISSION
 AVAILABLE_RESOURCE != ADMISSION_OBLIGATION
 ```
 
-Issue #208 is version-neutral and follows Current. Future successors can continue producing field evidence in the same stream without creating a new Field Guide candidate merely because the version changes.
+Issue #208 remains version-neutral and follows Current. Future successors can continue producing field evidence in the same stream without creating a Field Guide candidate merely because the version changes.
 
 ## Current upstream evidence review
 
@@ -87,7 +94,7 @@ POLICY_TRADEOFF_OBSERVED != UNIVERSAL_THRESHOLD_JUSTIFIED
 
 ### Existing Current operational procedures
 
-ENA Current already exposes practical procedures such as control retirement, standing input and purpose-relative continuity.
+ENA Current already exposes practical procedures such as control retirement, standing input, purpose-relative continuity, and the Minimum Evolution Loop.
 
 Their existence does not justify duplicated Field Guide entries. A separate entry becomes worthwhile only when real-use evidence adds a clearer trigger/action/monitor/stop pattern that remains useful without loading the upstream package.
 
@@ -97,28 +104,36 @@ Watch upstream Current field stream:
 
 `guytogay/evolution-native-agent-architecture#208`
 
+Also watch real downstream operating candidates such as PR #6. The Field Guide maintainer should independently verify candidate evidence and not infer admission from upstream release status.
+
 Good admission signals include:
 
 - the same practical failure appears in more than one real context;
 - operators repeatedly need the same bounded response;
+- a single-Host mechanism passes the specific missing reality check needed for its claimed scope;
 - an upstream procedure is correct but too package-specific to serve as a standalone operating card;
 - real use exposes when the procedure should **not** be used;
 - monitoring and revalidation conditions become observable.
 
 ## Admission queue
 
-Only active candidates:
+Active candidates:
 
-1. **source trust / selective permeability** — Metamemory mechanism evidence now exists; wait for real field cases that distinguish update speed, inertia, scope, override, and revalidation conditions;
-2. **control retirement** — admit only if real changing-ecology use demonstrates a reusable trigger/action/monitor/reactivate pattern beyond the Current procedure;
-3. **inheritance carrier choice** — reopen only if real use distinguishes distilled rules, richer developmental context or no inheritance in a decision-relevant way;
-4. **new #208 field pattern** — any genuinely recurring operating problem may enter without belonging to a pre-existing research metaphor.
+1. **self-maintenance kit / PR #6** — one real DSH/LXC occurrence; portable correction exists; next evidence boundary is controlled live restore + bounded portable smoke check; do not overclaim beyond one Host;
+2. **source trust / selective permeability** — Metamemory mechanism evidence exists; wait for real field cases that distinguish update speed, inertia, scope, override, and revalidation conditions;
+3. **control retirement** — admit only if real changing-ecology use demonstrates a reusable trigger/action/monitor/reactivate pattern beyond the Current procedure;
+4. **inheritance carrier choice** — reopen only if real use distinguishes distilled rules, richer developmental context or no inheritance in a decision-relevant way;
+5. **new #208 field pattern** — any genuinely recurring operating problem may enter without belonging to a pre-existing research metaphor.
 
 There is no obligation to keep a candidate for every upstream research track or release.
 
 ## Exact next action
 
-Observe #208 and real Host/adopter use. Do not open another synthetic mechanism track merely to populate the Field Guide.
+Maintain PR #6 as the active concrete candidate while continuing to observe #208 and real Host/adopter use.
+
+For PR #6, the next decision-changing evidence is not more prose or another synthetic argument; it is whether the corrected live restore path works in a bounded controlled drill and whether the portable scripts survive a bounded smoke check without relying on DSH-specific assumptions.
+
+Do not ask the human to perform mechanical repository or evidence-relay work that available Agent tooling can complete itself. Human participation should be reserved for genuinely irreducible Host/physical/authorization boundaries or decision-bearing judgment.
 
 For every proposed entry ask:
 
@@ -136,5 +151,6 @@ If yes and evidence is sufficient, add the smallest useful HOW and cite upstream
 - Do not turn negative/narrowing results into positive recipes.
 - Do not duplicate `releases/current/` procedures or adopter documentation.
 - Do not import Human-AI Workbench collaboration/release method.
+- Do not treat upstream Current status as automatic Field Guide admission.
 - Do not preserve speculative admission queue items merely because they once appeared in a coverage map.
 - Prefer zero entries over premature doctrine.
